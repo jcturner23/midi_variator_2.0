@@ -1,0 +1,75 @@
+io:
+  input_midi: input.mid
+  output_dir: out
+  output_prefix: variation
+  include_tracks: []
+
+analysis:
+  quantize_grid: "1/16"
+  keep_microtiming: true
+  phrase:
+    min_notes: 4
+    max_rest_beats_to_split: 0.75
+    similarity_threshold: 0.82
+  scale:
+    candidate_scales:
+      - major
+      - natural_minor
+      - dorian
+      - mixolydian
+    top_n: 3
+    include_relative_keys: true
+    include_adjacent_scales: true
+
+variation:
+  mode_order:
+    - phrase_repeat
+    - time_scale
+    - octave_shift
+    - scale_remap
+    - rhythm_displacement
+    - syncopation
+    - density_transform
+  phrase_repeat:
+    enabled: true
+    probability: 0.6
+    transform_on_repeat:
+      - none
+      - octave_up
+      - octave_down
+      - diatonic_sequence
+  time_scale:
+    enabled: true
+    factors: [0.5, 1.0, 2.0]
+    preserve_note_ends: true
+  octave_shift:
+    enabled: true
+    choices: [-12, 0, 12]
+    per_phrase_probability: 0.35
+  scale_remap:
+    enabled: true
+    snap_out_of_scale: true
+    borrowing_probability: 0.2
+  rhythm_displacement:
+    enabled: true
+    max_grid_shift_steps: 2
+    preserve_microtiming_delta: true
+  syncopation:
+    enabled: false
+    probability: 0.2
+    max_grid_shift_steps: 1
+  density_transform:
+    enabled: false
+    add_probability: 0.12
+    drop_probability: 0.08
+    max_generated_notes: 64
+
+musical_constraints:
+  pitch_range: [36, 96]
+  max_interval_semitones: 12
+  avoid_parallel_fifths: false
+
+generation:
+  outputs_per_track: 3
+  random_seed: 42
+  deterministic: false
